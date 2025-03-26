@@ -1,3 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  generateName: presync-job
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  template:
+    spec:
+      containers:
+        - name: presync-job
+          image: ubuntu     
+          command: 
+            - /bin/bash
+            - -c
+            - |
+              echo "This is pre-sync"
+      restartPolicy: Never
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -14,7 +33,7 @@ spec:
         app: guestbook-ui
     spec:
       containers:
-      - image: gcr.io/heptio-images/ks-guestbook-demo:0.1
+      - image: gcr.io/heptio-images/ks-guestbook-demo:0.2
         name: guestbook-ui
         ports:
         - containerPort: 80
